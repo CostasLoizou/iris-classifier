@@ -1,15 +1,8 @@
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
-import matplotlib.pyplot as plt
-import joblib
-import os
-
 from sklearn.datasets import load_iris
 iris = load_iris()
 x = iris.data  # shape (150,4)
 y = iris.target #shape (150,)
 print(iris.feature_names, iris.target_names)
-
-os.makedirs("outputs", exist_ok=True)
 
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
@@ -19,22 +12,7 @@ model = DecisionTreeClassifier(random_state=42)
 
 model.fit(X_train, y_train)
 
-# Save the trained model to the outputs folder
-joblib.dump(model, "outputs/iris_model.joblib")
-
 y_pred = model.predict(X_test)
-
-# Create the confusion matrix
-cm = confusion_matrix(y_test, y_pred)
-
-# Create a nice visual plot
-disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=iris.target_names)
-disp.plot()
-
-# Save the plot as a PNG file in the outputs folder
-plt.tight_layout()
-plt.savefig("outputs/confusion_matrix.png")
-plt.close()
 
 print("predictions:", y_pred[:5])
 print("true labels:", y_test[:5])
